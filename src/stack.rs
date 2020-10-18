@@ -1,7 +1,7 @@
 use std::collections::LinkedList;
 use std::fmt;
 
-// ------------------------- Stack<T> -------------------------------
+// ------------------------- Stack<T> First-In-First-Out-------------
 
 ///
 #[derive(Debug)]
