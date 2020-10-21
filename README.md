@@ -84,6 +84,8 @@ Complexity ordered in form smallest to largest:
     | **Remove at tail** |**O(n)** | **O(1)**
     | **Remove in middle** |**O(n)** | **O(n)**
 
+<hr>
+
 ### `Stack`
 
 - Concept:
@@ -140,6 +142,8 @@ Complexity ordered in form smallest to largest:
         cargo watch -c --exec 'test --features "enable_debug_code_token_pairing" token -- --nocapture'
         ```
 
+<hr>
+
 ### `Queue`
 
 - Concept:
@@ -162,7 +166,7 @@ Complexity ordered in form smallest to largest:
 
     </br>
 
-    It's a `First-in-last-out (FILO)` model.
+    It's a `First-in-first-out (FIFO)` model.
 
 - use cases:
 
@@ -182,4 +186,14 @@ Complexity ordered in form smallest to largest:
     | Size | **O(1)**
     | Is Empty | **O(1)**
 
+<hr>
+
+### `Priority Queue (PQ)`
+
+- Concept:
+
+    A `Priority Queue` is an **ADT** that works like a normal `Queue` except that `each element has a certain priority`.
+    And that priority value determines the removing order from the queue.
+
+    The element has to implement the `PartialEq` trait for supporting the priority comparison.
 

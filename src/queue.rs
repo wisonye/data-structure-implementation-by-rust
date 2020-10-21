@@ -1,7 +1,7 @@
 use std::collections::LinkedList;
 use std::fmt;
 
-// ----------------- Queue<T> First-In-Last-Out (FILO) -------------------
+// ----------------- Queue<T> First-In-First-Out (FIFO) ------------------
 
 ///
 #[derive(Debug)]
