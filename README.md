@@ -42,6 +42,22 @@ Complexity ordered in form smallest to largest:
 
 ### `LinkedList` 
 
+- Concept:
+
+    A `LinkedList` is a sequential list of nodes that hold data which point to other nodes also containing data.
+
+    **Head** --> Node ---> Node --> **Tail**
+
+    - `Head`: the first node in the list.
+    - `Tail`: the last node in the list.
+    - `Pointer`: Reference point to another node.
+    - `Node`: An object containing data and pointer(s).
+
+    </br>
+
+    - `SingleLinkedList`: Each node only hold the reference to the next node.
+    - `DoubleLinkedList`: Each node holds the reference to the next node and the previous node at the same time.
+
 - use cases:
 
     - Used in many `List`, `Queue` and `Stack` implementation.
@@ -68,7 +84,28 @@ Complexity ordered in form smallest to largest:
     | **Remove at tail** |**O(n)** | **O(1)**
     | **Remove in middle** |**O(n)** | **O(n)**
 
-### `Stack` 
+### `Stack`
+
+- Concept:
+
+    A `Stack` is a one-ended linear data structure which models a real-world stack by having two primary operations:
+
+    ```
+    Push (on top)  Pop (from top)
+       ↘            ↗
+         ↘        ↗
+       ------------- 
+      | *********** |
+       ------------- 
+    ```
+
+
+    - `Push`: add the element to the end of the stack.
+    - `Pop`: remove the last element from the stack.
+
+    </br>
+
+    It's a `Last-in-first-out (LIFO)` model.
 
 - use cases:
 
@@ -102,3 +139,47 @@ Complexity ordered in form smallest to largest:
         # Print all debug info
         cargo watch -c --exec 'test --features "enable_debug_code_token_pairing" token -- --nocapture'
         ```
+
+### `Queue`
+
+- Concept:
+
+    A `Queue` is a one-ended linear data structure which models a real-world queue by having two primary operations:
+
+    ```
+                                 Queue-Back
+                                   ↓
+               -   -   -   -   -   - 
+    Dequeue ⇐ |*| |*| |*| |*| |*| |*| ⇐ Enqueue
+               -   -   -   -   -   - 
+               ↑
+             Queue-Front
+    ```
+
+
+    - `Enqueue/Adding/Offering`: add the element to the back.
+    - `Dequeue/Removing/Polling`: remove the element from the front.
+
+    </br>
+
+    It's a `First-in-last-out (FILO)` model.
+
+- use cases:
+
+    - Any waiting line modes a queue. For example a lineup in super market counter.
+    - Web server request management (first come first serve).
+    - Do a `Breadth First Search (BFS)` on a graph
+
+- Complexity
+
+    | Complexity | Notation
+    |----------: | --------
+    | Enqueue | **O(1)**
+    | Dequeue | **O(1)**
+    | Peeking | **O(1)**
+    | Contains | **O(n)**
+    | Removal | **O(n)**
+    | Size | **O(1)**
+    | Is Empty | **O(1)**
+
+

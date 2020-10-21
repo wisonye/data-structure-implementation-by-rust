@@ -1,7 +1,7 @@
 use std::collections::LinkedList;
 use std::fmt;
 
-// ------------------------- Stack<T> Last-in-first-out -------------
+// ----------------- Stack<T> Last-in-first-out (LIFO) -------------------
 
 ///
 #[derive(Debug)]
@@ -11,11 +11,13 @@ pub struct Stack<T: Clone + fmt::Debug> {
 }
 
 ///
-impl<T: Clone + fmt::Debug> Stack<T> {
+impl<T: Clone + fmt::Debug + PartialEq> Stack<T> {
     ///
     pub fn new() -> Self {
         Stack {
             size: 0usize,
+            // We don't need the access backwards, that's why I pick
+            // `SingleLinkedList` rather the the `DoubleLinkedList`.
             inner_list: LinkedList::new(),
         }
     }
@@ -60,6 +62,11 @@ impl<T: Clone + fmt::Debug> Stack<T> {
     pub fn is_empty(&self) -> bool {
         self.size == 0
     }
+
+    ///
+    pub fn is_contains(&self, data: T) -> bool {
+        self.inner_list.iter().any(|element| *element == data)
+    }
 }
 
 #[cfg(test)]
@@ -79,30 +86,30 @@ mod tests {
         my_stack.push(10);
         assert_eq!(false, my_stack.is_empty());
         assert_eq!(1, my_stack.len());
-
+        //
         my_stack.push(20);
         my_stack.push(30);
         assert_eq!(3, my_stack.len());
-
+        //
         let mut pop_value = my_stack.pop();
         assert_eq!(2, my_stack.len());
         assert_eq!(pop_value, Some(30));
-
+        //
         pop_value = my_stack.pop();
         assert_eq!(1, my_stack.len());
         assert_eq!(pop_value, Some(20));
         println!("my_stack {:#?}", &my_stack);
-
+        //
         let peek_value = my_stack.peek();
         assert_eq!(peek_value, Some(10));
         assert_eq!(1, my_stack.len());
-
+        //
         pop_value = my_stack.pop();
         assert_eq!(true, my_stack.is_empty());
         assert_eq!(0, my_stack.len());
         assert_eq!(pop_value, Some(10));
         println!("my_stack {:#?}", &my_stack);
-
+        //
         // Empty
         assert_eq!(true, my_stack.is_empty());
         assert_eq!(None, my_stack.peek());
@@ -111,12 +118,12 @@ mod tests {
 
     #[test]
     fn should_work_with_struct() {
-        #[derive(Debug, Clone)]
+        #[derive(Debug, Clone, PartialEq)]
         struct Book<'b> {
             title: &'b str,
             author: &'b str,
         }
-
+        //
         let mut book_stack = Stack::<Book>::new();
         book_stack.push(Book {
             title: "No 1 sales",
@@ -128,23 +135,39 @@ mod tests {
         });
         assert_eq!(false, book_stack.is_empty());
         assert_eq!(2, book_stack.len());
-
+        //
         let mut book = book_stack.pop();
         assert_eq!(true, book.is_some());
         assert_eq!("Homes", book.as_ref().unwrap().title);
-
+        //
         let peek = book_stack.peek();
         assert_eq!(true, peek.is_some());
         assert_eq!("No 1 sales", peek.as_ref().unwrap().title);
         println!("book_stack {:#?}", &book_stack);
-
+        //
         book = book_stack.pop();
         assert_eq!(true, book.is_some());
         assert_eq!("No 1 sales", book.as_ref().unwrap().title);
-
+        //
         // Empty
         assert_eq!(true, book_stack.is_empty());
         assert_eq!(true, book_stack.peek().is_none());
         assert_eq!(true, book_stack.pop().is_none());
+    }
+
+    #[test]
+    fn is_contains_should_work() {
+        let my_stack = Stack::<u8>::new();
+        assert_eq!(false, my_stack.is_contains(9));
+
+        let mut my_stack_2 = Stack::<u8>::new();
+        my_stack_2.push(2);
+        my_stack_2.push(4);
+        my_stack_2.push(6);
+
+        println!("my_stack_2 {:#?}", &my_stack_2);
+
+        assert_eq!(false, my_stack_2.is_contains(9));
+        assert_eq!(true, my_stack_2.is_contains(4));
     }
 }

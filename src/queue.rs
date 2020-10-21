@@ -1,7 +1,7 @@
 use std::collections::LinkedList;
 use std::fmt;
 
-// ------------------------- Queue<T> First-In-Last-Out--------------
+// ----------------- Queue<T> First-In-Last-Out (FILO) -------------------
 
 ///
 #[derive(Debug)]
@@ -11,11 +11,13 @@ pub struct Queue<T: Clone + fmt::Debug> {
 }
 
 ///
-impl<T: Clone + fmt::Debug> Queue<T> {
+impl<T: Clone + fmt::Debug + PartialEq> Queue<T> {
     ///
     fn new() -> Self {
         Queue {
             size: 0usize,
+            // We don't need the access backwards, that's why I pick 
+            // `SingleLinkedList` rather the the `DoubleLinkedList`.
             inner_list: LinkedList::new(),
         }
     }
@@ -44,6 +46,11 @@ impl<T: Clone + fmt::Debug> Queue<T> {
     ///
     fn is_empty(&self) -> bool {
         self.size == 0
+    }
+
+    ///
+    pub fn is_contains(&self, data: T) -> bool {
+        self.inner_list.iter().any(|element| *element == data)
     }
 }
 
@@ -88,7 +95,7 @@ mod tests {
 
     #[test]
     fn should_work_with_struct() {
-        #[derive(Debug, Clone)]
+        #[derive(Debug, Clone, PartialEq)]
         struct Book<'b> {
             title: &'b str,
             author: &'b str,
@@ -117,5 +124,21 @@ mod tests {
 
         assert_eq!(true, book_queue.is_empty());
         assert_eq!(true, book_queue.dequeue().is_none());
+    }
+
+    #[test]
+    fn is_contains_should_work() {
+        let my_queue = Queue::<u8>::new();
+        assert_eq!(false, my_queue.is_contains(9));
+
+        let mut my_queue_2 = Queue::<u8>::new();
+        my_queue_2.enqueue(2);
+        my_queue_2.enqueue(4);
+        my_queue_2.enqueue(6);
+
+        println!("my_queue_2 {:#?}", &my_queue_2);
+
+        assert_eq!(false, my_queue_2.is_contains(9));
+        assert_eq!(true, my_queue_2.is_contains(4));
     }
 }
