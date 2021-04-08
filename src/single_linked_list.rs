@@ -1,80 +1,83 @@
 #![allow(warnings)]
-//! # `SingeLinkedList`
-//!
-//! It looks like this:
-//!
-//! Head --> Node1 --> Node2 --> Tail
-//!
-
 use std::fmt;
 use std::ptr::NonNull;
 
 /// The type here describes either a **valid pointer** or a **null pointer**.
 /// That's why we use `Option` here which only got 2 possible values:
 ///
-/// `Some()` - means **valid pointer**
-/// `None` - means **null pointer**
+/// - `Some()` - means **valid pointer**
+/// - `None` - means **null pointer**
 ///
-/// The **valid pointer* means:
+/// The **valid pointer** means:
 ///
-/// 1. Non null, it must point to particular `Node<T>` instance.
-/// 2. `Node<T>` instance should live inside the **heap**.
+/// - Non null, it must point to the particular `Node<T>` instance.
+/// - `Node<T>` instance should live inside the **heap**.
 ///
 /// That's why we use `Box<Node<T>>` which is a smart pointer in `Rust`.
 /// Below is the steps to get back a `NonNull<Node<T>>` from `Box<Node<T>>`:
 ///
-/// ```
+/// ```rust
 /// // 1. Create new box node instance
-/// // let box_node = Box::new(Node {});
+/// let box_node = Box::new(Node {});
 ///
 /// // 2. Get back a `&mut Node<T>` from box node instance
-/// // let box_node_mut_ref: &mut Node<T> = Box::leak(box_node);
+/// let box_node_mut_ref: &mut Node<T> = Box::leak(box_node);
 ///
 /// // 3. Get back `NonNull<Node<T>>` from `&mut Node<T>` (mutable reference just pointer)
-/// // let non_null_node = NonNull::from(box_node_mut_ref);
+/// let non_null_node = NonNull::from(box_node_mut_ref);
 ///
 /// // 4. Finally, get back `Option<NonNull<Node<T>>>`
-/// // let head = Some(non_null_node);
+/// let head = Some(non_null_node);
 ///
-/// // 5. All in one step:
-/// // let head = Some(NonNull::from(Box::leak(Box::new(Node {}))));
+/// // Or make all of those into a single step:
+/// let head = Some(NonNull::from(Box::leak(Box::new(Node {}))));
 /// ```
+///
+/// </br>
 ///
 /// But how to get back `Option<&Node<T>>` from `Option<NonNull<Node<T>>>`???
 ///
-/// `NonNull<Node<T>>.as_ptr()` get back a raw pointer to `Node<T>`, then We got 2 ways to do that:
+/// `NonNull<Node<T>>.as_ptr()` gets back a raw pointer to `Node<T>`, we got 2 options to make that
+/// happen:
 ///
-/// ```
-/// // let mut next_option_ref: Option<&Node<T>> = match self.next {
-/// //     Some(temp_next) => {
-/// //         let ptr: *mut Node<T> = temp_next.as_ptr();
-/// //         unsafe { Some(&*ptr) }
-/// //     }
-/// //     None => None,
-/// // };
+/// - Option A:
 ///
-/// // let mut next_option_ref: Option<&Node<T>> = None;
-/// // if self.next.is_some() {
-/// //     let unwrap_non_null = self.next.as_ref().unwrap();
-/// //     let raw_ptr: *mut Node<T> = unwrap_non_null.as_ptr();
-/// //     unsafe {
-/// //         next_option_ref = Some(&*raw_ptr);
-/// //     }
-/// // }
-/// ```
+///     ```
+///     // For example, the `next_node` is the instance of `NextNode<T>`
+///     let mut next_option_ref: Option<&Node<T>> = match next_node {
+///         Some(temp_next) => {
+///             let ptr: *mut Node<T> = temp_next.as_ptr();
+///             unsafe { Some(&*ptr) }
+///         }
+///         None => None,
+///     };
+///
+/// - Option B:
+///
+///     ```
+///     // For example, the `next_node` is the instance of `NextNode<T>`
+///     let mut next_option_ref: Option<&Node<T>> = None;
+///     if next_node.is_some() {
+///         let unwrap_non_null = self.next.as_ref().unwrap();
+///         let raw_ptr: *mut Node<T> = unwrap_non_null.as_ptr();
+///         unsafe {
+///             next_option_ref = Some(&*raw_ptr);
+///         }
+///     }
+///     ```
 ///
 /// By the way, we **CANNOT** use `Some(Box::from_raw(temp_head.as_ptr()))` to get back a
 /// `Option<Box<Node<T>>>`, as that will consume and drop the node instance when it out of scope
 /// which will cause `pointer being freed was not allocated`!!!
 ///
-type PointToNextNode<T> = Option<NonNull<Node<T>>>;
+type NextNode<T> = Option<NonNull<Node<T>>>;
 
 // ------------------------- Node<T> ---------------------------------
 
 ///
 struct Node<T: Clone + fmt::Debug> {
     data: T,
-    next: PointToNextNode<T>,
+    next: NextNode<T>,
 }
 
 impl<T: Clone + fmt::Debug> fmt::Debug for Node<T> {
@@ -104,10 +107,16 @@ impl<T: Clone + fmt::Debug> Node<T> {
 // ------------------------- SingeLinkedList<T> ----------------------
 
 ///
+/// # `SingeLinkedList`
+///
+/// It looks like this:
+///
+/// Head --> Node1 --> Node2 --> Tail
+///
 pub struct SingeLinkedList<T: Clone + fmt::Debug> {
     size: usize,
-    head: PointToNextNode<T>,
-    tail: PointToNextNode<T>,
+    head: NextNode<T>,
+    tail: NextNode<T>,
 }
 
 impl<T: Clone + fmt::Debug> fmt::Debug for SingeLinkedList<T> {
