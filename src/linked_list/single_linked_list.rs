@@ -60,7 +60,7 @@ impl<T: Debug + PartialEq> SingleLinkedList<T> {
         self.size
     }
 
-    /// Get back the reference to `head` node's data
+    ///
     pub fn get_head(&self) -> Option<&T> {
         match self.head {
             Some(ptr_to_node) => {
@@ -71,7 +71,7 @@ impl<T: Debug + PartialEq> SingleLinkedList<T> {
         }
     }
 
-    /// Get back the reference to `tail` node's data
+    ///
     pub fn get_tail(&self) -> Option<&T> {
         match self.tail {
             Some(ptr_to_node) => {
@@ -165,7 +165,7 @@ impl<T: Debug + PartialEq> SingleLinkedList<T> {
         Some(tail_data)
     }
 
-    /// Check whether cme-window ontains the `data_to_check` or not.
+    ///
     pub fn contain(&self, data_to_check: T) -> bool {
         if self.head.is_none() {
             // println!("container -> No head",);
@@ -250,7 +250,7 @@ impl<T: Debug + PartialEq> SingleLinkedList<T> {
         self.size += 1;
     }
 
-    /// Print the entire list content
+    ///
     pub fn print_list(&self) {
         if self.head.is_none() {
             println!("empty list ");
@@ -278,7 +278,7 @@ impl<T: Debug + PartialEq> SingleLinkedList<T> {
         );
     }
 
-    /// Walk through the list and return the entire content string
+    /// The content string looks like "xxx ---> yyy", or "empty list".
     pub fn get_list_content(&self) -> String {
         if self.head.is_none() {
             return "empty list".to_string();

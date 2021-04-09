@@ -77,7 +77,7 @@ fn integer_list_test_insert_at_head_and_append_should_work_correctly() {
 #[test]
 fn integer_list_test_pop_head_should_work_correctly() {
     let mut integer_list = create_test_list();
-    //
+
     assert_eq!(integer_list.pop_head(), Some(1));
     assert_eq!(integer_list.get_head(), Some(&2));
     assert_eq!(integer_list.get_tail(), Some(&4));
