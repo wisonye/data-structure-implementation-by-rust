@@ -1,5 +1,35 @@
 # `Rust` data structure implemenation
 
+## How to generate the lib documentation
+
+```bash
+cargo doc --lib --document-private-items --release --open
+```
+
+</br>
+
+## How to run the test
+
+```bash
+# If run all internal unit test which allows to test all private functions
+cargo test --lib
+
+# If run all internal unit test which allows to test all private functions
+# If you want to see the `println` output
+cargo test --lib -- --nocapture
+
+# If run all internal unit test which allows to test all private functions
+# Also, if you want to run all integrateion unit test in `tests` folder
+cargo test
+
+# If run all internal unit test which allows to test all private functions
+# Also, if you want to run all integrateion unit test in `tests` folder
+# If you want to see the `println` output
+cargo test -- --nocapture
+```
+
+</br>
+
 ## What is `Abstract Data Type (ADT)`
 
 An `Abstract Data Type (ADT)` is an abstraction of a data structure which provides the only interface to which data structure must adhere to.
@@ -37,6 +67,10 @@ Complexity ordered in form smallest to largest:
 | Factorial Time| **O(n!)**
 
 </br>
+
+
+</br>
+
 
 ## which data structure I should use?
 
@@ -83,6 +117,20 @@ Complexity ordered in form smallest to largest:
     | **Remove at head** |**O(1)** | **O(1)**
     | **Remove at tail** |**O(n)** | **O(1)**
     | **Remove in middle** |**O(n)** | **O(n)**
+
+- Single linked list:
+
+    - [single_linked_list.rs](https://github.com/wisonye/data-structure-implementation-by-rust/tree/master/src/linked_list/single_linked_list.rs)
+
+        Run that dev test with the following command:
+
+        ```bash
+        # No debug info output
+        cargo watch --clear --exec 'test list_test'
+
+        # With debug info output
+        cargo watch --clear --exec 'test list_test -- --nocapture'
+        ```
 
 <hr>
 
