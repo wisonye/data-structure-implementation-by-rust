@@ -10,7 +10,7 @@ fn create_test_list() -> SingleLinkedList<isize> {
 }
 
 #[test]
-fn integer_list_test_should_create_empty_integer_list() {
+fn should_create_empty_integer_list() {
     let mut integer_list = SingleLinkedList::<isize>::new();
 
     assert_eq!(integer_list.size(), 0);
@@ -26,7 +26,7 @@ fn integer_list_test_should_create_empty_integer_list() {
 }
 
 #[test]
-fn integer_list_test_should_create_valid_integer_list_with_the_correct_size() {
+fn should_create_valid_integer_list_with_the_correct_size() {
     let integer_list = create_test_list();
 
     assert_eq!(integer_list.size(), 4);
@@ -45,7 +45,7 @@ fn integer_list_test_should_create_valid_integer_list_with_the_correct_size() {
 }
 
 #[test]
-fn integer_list_test_insert_at_head_and_append_should_work_correctly() {
+fn insert_at_head_and_append_should_work_correctly() {
     let mut integer_list = create_test_list();
 
     integer_list.insert_at_head(0);
@@ -75,7 +75,7 @@ fn integer_list_test_insert_at_head_and_append_should_work_correctly() {
 }
 
 #[test]
-fn integer_list_test_pop_head_should_work_correctly() {
+fn pop_head_should_work_correctly() {
     let mut integer_list = create_test_list();
 
     assert_eq!(integer_list.pop_head(), Some(1));
@@ -123,7 +123,7 @@ fn integer_list_test_pop_head_should_work_correctly() {
 }
 
 #[test]
-fn integer_list_test_pop_tail_should_work_correctly() {
+fn pop_tail_should_work_correctly() {
     let mut integer_list = create_test_list();
 
     assert_eq!(integer_list.pop_tail(), Some(4));

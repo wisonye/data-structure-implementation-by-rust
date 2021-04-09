@@ -9,7 +9,7 @@ fn create_test_list() -> SingleLinkedList<String> {
 }
 
 #[test]
-fn string_list_test_should_create_empty_string_list() {
+fn should_create_empty_string_list() {
     let mut string_list = SingleLinkedList::<String>::new();
 
     assert_eq!(string_list.size(), 0);
@@ -25,7 +25,7 @@ fn string_list_test_should_create_empty_string_list() {
 }
 
 #[test]
-fn string_list_test_should_create_valid_string_list_with_the_correct_size() {
+fn should_create_valid_string_list_with_the_correct_size() {
     let string_list = create_test_list();
 
     assert_eq!(string_list.size(), 3);
@@ -43,7 +43,7 @@ fn string_list_test_should_create_valid_string_list_with_the_correct_size() {
 }
 
 #[test]
-fn string_list_test_insert_at_head_and_append_should_work_correctly() {
+fn insert_at_head_and_append_should_work_correctly() {
     let mut string_list = create_test_list();
 
     string_list.insert_at_head("that: ".to_string());
@@ -72,7 +72,7 @@ fn string_list_test_insert_at_head_and_append_should_work_correctly() {
 }
 
 #[test]
-fn string_list_test_pop_head_should_work_correctly() {
+fn pop_head_should_work_correctly() {
     let mut string_list = create_test_list();
 
     assert_eq!(string_list.pop_head(), Some("Rust".to_string()));
@@ -107,7 +107,7 @@ fn string_list_test_pop_head_should_work_correctly() {
 }
 
 #[test]
-fn string_list_test_pop_tail_should_work_correctly() {
+fn pop_tail_should_work_correctly() {
     let mut string_list = create_test_list();
 
     assert_eq!(string_list.pop_tail(), Some("Awesome!".to_string()));

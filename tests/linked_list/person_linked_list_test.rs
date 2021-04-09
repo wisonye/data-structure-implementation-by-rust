@@ -15,7 +15,7 @@ fn create_test_list() -> SingleLinkedList<Person> {
 }
 
 #[test]
-fn person_list_test_should_create_empty_person_list() {
+fn should_create_empty_person_list() {
     let mut person_list = SingleLinkedList::<isize>::new();
 
     assert_eq!(person_list.size(), 0);
@@ -31,7 +31,7 @@ fn person_list_test_should_create_empty_person_list() {
 }
 
 #[test]
-fn person_list_test_should_create_valid_person_list_with_the_correct_size() {
+fn should_create_valid_person_list_with_the_correct_size() {
     let person_list = create_test_list();
 
     assert_eq!(person_list.size(), 3);
@@ -49,7 +49,7 @@ fn person_list_test_should_create_valid_person_list_with_the_correct_size() {
 }
 
 #[test]
-fn person_list_test_insert_at_head_and_append_should_work_correctly() {
+fn insert_at_head_and_append_should_work_correctly() {
     let mut person_list = create_test_list();
 
     person_list.insert_at_head(Person { name: "Mary".to_string(), age: None });
@@ -78,7 +78,7 @@ fn person_list_test_insert_at_head_and_append_should_work_correctly() {
 }
 
 #[test]
-fn person_list_test_pop_head_should_work_correctly() {
+fn pop_head_should_work_correctly() {
     let mut person_list = create_test_list();
    
     assert_eq!(person_list.pop_head(), Some(Person { name: "David Chen".to_string(), age: Some(25) }));
