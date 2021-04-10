@@ -1,4 +1,4 @@
-# `Rust` data structure implemenation
+# `Rust` data structure implementation
 
 ## How to generate the lib documentation
 
@@ -11,19 +11,17 @@ cargo doc --lib --document-private-items --release --open
 ## How to run the test
 
 ```bash
-# If run all internal unit test which allows to test all private functions
+# Run all internal unit test which allows testing all private functions
 cargo test --lib
 
-# If run all internal unit test which allows to test all private functions
+# Run all internal unit test which allows testing all private functions
 # If you want to see the `println` output
 cargo test --lib -- --nocapture
 
-# If run all internal unit test which allows to test all private functions
-# Also, if you want to run all integrateion unit test in `tests` folder
+# Run all internal unit test and all integration unit test in `tests` folder
 cargo test
 
-# If run all internal unit test which allows to test all private functions
-# Also, if you want to run all integrateion unit test in `tests` folder
+# Run all internal unit test and all integration unit test in `tests` folder
 # If you want to see the `println` output
 cargo test -- --nocapture
 ```
@@ -71,8 +69,7 @@ Complexity ordered in form smallest to largest:
 
 </br>
 
-
-## which data structure I should use?
+## The common data structure and use case
 
 ### `LinkedList` 
 
@@ -178,7 +175,9 @@ Complexity ordered in form smallest to largest:
 
 - Sample:
 
-    - [source_code_token_pairing_validator.rs](https://github.com/wisonye/data-structure-implementation-by-rust/tree/master/src/source_code_token_pairing_validator.rs)
+    - [stack.rs](https://github.com/wisonye/data-structure-implementation-by-rust/tree/master/src/stack/stack.rs)
+    - [browser_history_stack.rs](https://github.com/wisonye/data-structure-implementation-by-rust/tree/master/src/stack/browser_history_stack.rs)
+    - [source_code_token_pairing_validator.rs](https://github.com/wisonye/data-structure-implementation-by-rust/tree/master/src/stack/source_code_token_pairing_validator.rs)
 
         Run that test with the following command:
 
