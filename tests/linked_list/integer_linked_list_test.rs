@@ -16,9 +16,10 @@ fn should_create_empty_integer_list() {
     assert_eq!(integer_list.size(), 0);
     assert_eq!(integer_list.get_head(), None);
     assert_eq!(integer_list.get_tail(), None);
-    assert_eq!(integer_list.contain(8), false);
+    assert_eq!(integer_list.contains(8), false);
     assert_eq!(integer_list.pop_head(), None);
     assert_eq!(integer_list.pop_tail(), None);
+    assert_eq!(integer_list.peek_tail(), None);
     assert_eq!(integer_list.get_head(), None);
     assert_eq!(integer_list.get_tail(), None);
     integer_list.print_list();
@@ -32,11 +33,11 @@ fn should_create_valid_integer_list_with_the_correct_size() {
     assert_eq!(integer_list.size(), 4);
     assert_eq!(integer_list.get_head(), Some(&1));
     assert_eq!(integer_list.get_tail(), Some(&4));
-    assert_eq!(integer_list.contain(0), false);
-    assert_eq!(integer_list.contain(1), true);
-    assert_eq!(integer_list.contain(2), true);
-    assert_eq!(integer_list.contain(3), true);
-    assert_eq!(integer_list.contain(4), true);
+    assert_eq!(integer_list.contains(0), false);
+    assert_eq!(integer_list.contains(1), true);
+    assert_eq!(integer_list.contains(2), true);
+    assert_eq!(integer_list.contains(3), true);
+    assert_eq!(integer_list.contains(4), true);
     integer_list.print_list();
     assert_eq!(
         integer_list.get_list_content(),
@@ -53,7 +54,7 @@ fn insert_at_head_and_append_should_work_correctly() {
     // println!("get_tail(): {:?}", integer_list.get_tail());
     assert_eq!(integer_list.get_head(), Some(&0));
     assert_eq!(integer_list.get_tail(), Some(&4));
-    assert_eq!(integer_list.contain(0), true);
+    assert_eq!(integer_list.contains(0), true);
     integer_list.print_list();
     assert_eq!(
         integer_list.get_list_content(),
@@ -65,8 +66,8 @@ fn insert_at_head_and_append_should_work_correctly() {
     // println!("get_tail(): {:?}", integer_list.get_tail());
     assert_eq!(integer_list.get_head(), Some(&-1));
     assert_eq!(integer_list.get_tail(), Some(&4));
-    assert_eq!(integer_list.contain(-1), true);
-    assert_eq!(integer_list.contain(0), true);
+    assert_eq!(integer_list.contains(-1), true);
+    assert_eq!(integer_list.contains(0), true);
     integer_list.print_list();
     assert_eq!(
         integer_list.get_list_content(),
@@ -81,10 +82,10 @@ fn pop_head_should_work_correctly() {
     assert_eq!(integer_list.pop_head(), Some(1));
     assert_eq!(integer_list.get_head(), Some(&2));
     assert_eq!(integer_list.get_tail(), Some(&4));
-    assert_eq!(integer_list.contain(1), false);
-    assert_eq!(integer_list.contain(2), true);
-    assert_eq!(integer_list.contain(3), true);
-    assert_eq!(integer_list.contain(4), true);
+    assert_eq!(integer_list.contains(1), false);
+    assert_eq!(integer_list.contains(2), true);
+    assert_eq!(integer_list.contains(3), true);
+    assert_eq!(integer_list.contains(4), true);
     integer_list.print_list();
     assert_eq!(
         integer_list.get_list_content(),
@@ -94,30 +95,30 @@ fn pop_head_should_work_correctly() {
     assert_eq!(integer_list.pop_head(), Some(2));
     assert_eq!(integer_list.get_head(), Some(&3));
     assert_eq!(integer_list.get_tail(), Some(&4));
-    assert_eq!(integer_list.contain(1), false);
-    assert_eq!(integer_list.contain(2), false);
-    assert_eq!(integer_list.contain(3), true);
-    assert_eq!(integer_list.contain(4), true);
+    assert_eq!(integer_list.contains(1), false);
+    assert_eq!(integer_list.contains(2), false);
+    assert_eq!(integer_list.contains(3), true);
+    assert_eq!(integer_list.contains(4), true);
     integer_list.print_list();
     assert_eq!(integer_list.get_list_content(), "(2 elements): 3 --> 4");
     
     assert_eq!(integer_list.pop_head(), Some(3));
     assert_eq!(integer_list.get_head(), Some(&4));
     assert_eq!(integer_list.get_tail(), Some(&4));
-    assert_eq!(integer_list.contain(1), false);
-    assert_eq!(integer_list.contain(2), false);
-    assert_eq!(integer_list.contain(3), false);
-    assert_eq!(integer_list.contain(4), true);
+    assert_eq!(integer_list.contains(1), false);
+    assert_eq!(integer_list.contains(2), false);
+    assert_eq!(integer_list.contains(3), false);
+    assert_eq!(integer_list.contains(4), true);
     integer_list.print_list();
     assert_eq!(integer_list.get_list_content(), "(1 elements): 4");
 
     assert_eq!(integer_list.pop_head(), Some(4));
     assert_eq!(integer_list.get_head(), None);
     assert_eq!(integer_list.get_tail(), None);
-    assert_eq!(integer_list.contain(1), false);
-    assert_eq!(integer_list.contain(2), false);
-    assert_eq!(integer_list.contain(3), false);
-    assert_eq!(integer_list.contain(4), false);
+    assert_eq!(integer_list.contains(1), false);
+    assert_eq!(integer_list.contains(2), false);
+    assert_eq!(integer_list.contains(3), false);
+    assert_eq!(integer_list.contains(4), false);
     integer_list.print_list();
     assert_eq!(integer_list.get_list_content(), "empty list");
 }
@@ -126,46 +127,54 @@ fn pop_head_should_work_correctly() {
 fn pop_tail_should_work_correctly() {
     let mut integer_list = create_test_list();
 
+    assert_eq!(integer_list.peek_tail(), Some(&4));
+    assert_eq!(
+        integer_list.get_list_content(),
+        "(4 elements): 1 --> 2 --> 3 --> 4"
+    );
+
     assert_eq!(integer_list.pop_tail(), Some(4));
     assert_eq!(integer_list.get_head(), Some(&1));
     assert_eq!(integer_list.get_tail(), Some(&3));
-    assert_eq!(integer_list.contain(1), true);
-    assert_eq!(integer_list.contain(2), true);
-    assert_eq!(integer_list.contain(3), true);
-    assert_eq!(integer_list.contain(4), false);
+    assert_eq!(integer_list.contains(1), true);
+    assert_eq!(integer_list.contains(2), true);
+    assert_eq!(integer_list.contains(3), true);
+    assert_eq!(integer_list.contains(4), false);
     integer_list.print_list();
     assert_eq!(
         integer_list.get_list_content(),
         "(3 elements): 1 --> 2 --> 3"
     );
 
+    assert_eq!(integer_list.peek_tail(), Some(&3));
     assert_eq!(integer_list.pop_tail(), Some(3));
+    assert_eq!(integer_list.peek_tail(), Some(&2));
     assert_eq!(integer_list.get_head(), Some(&1));
     assert_eq!(integer_list.get_tail(), Some(&2));
-    assert_eq!(integer_list.contain(1), true);
-    assert_eq!(integer_list.contain(2), true);
-    assert_eq!(integer_list.contain(3), false);
-    assert_eq!(integer_list.contain(4), false);
+    assert_eq!(integer_list.contains(1), true);
+    assert_eq!(integer_list.contains(2), true);
+    assert_eq!(integer_list.contains(3), false);
+    assert_eq!(integer_list.contains(4), false);
     integer_list.print_list();
     assert_eq!(integer_list.get_list_content(), "(2 elements): 1 --> 2");
 
     assert_eq!(integer_list.pop_tail(), Some(2));
     assert_eq!(integer_list.get_head(), Some(&1));
     assert_eq!(integer_list.get_tail(), Some(&1));
-    assert_eq!(integer_list.contain(1), true);
-    assert_eq!(integer_list.contain(2), false);
-    assert_eq!(integer_list.contain(3), false);
-    assert_eq!(integer_list.contain(4), false);
+    assert_eq!(integer_list.contains(1), true);
+    assert_eq!(integer_list.contains(2), false);
+    assert_eq!(integer_list.contains(3), false);
+    assert_eq!(integer_list.contains(4), false);
     integer_list.print_list();
     assert_eq!(integer_list.get_list_content(), "(1 elements): 1");
 
     assert_eq!(integer_list.pop_tail(), Some(1));
     assert_eq!(integer_list.get_head(), None);
     assert_eq!(integer_list.get_tail(), None);
-    assert_eq!(integer_list.contain(1), false);
-    assert_eq!(integer_list.contain(2), false);
-    assert_eq!(integer_list.contain(3), false);
-    assert_eq!(integer_list.contain(4), false);
+    assert_eq!(integer_list.contains(1), false);
+    assert_eq!(integer_list.contains(2), false);
+    assert_eq!(integer_list.contains(3), false);
+    assert_eq!(integer_list.contains(4), false);
     integer_list.print_list();
     assert_eq!(integer_list.get_list_content(), "empty list");
 }

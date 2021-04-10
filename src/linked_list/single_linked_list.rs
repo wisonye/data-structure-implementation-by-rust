@@ -165,8 +165,19 @@ impl<T: Debug + PartialEq> SingleLinkedList<T> {
         Some(tail_data)
     }
 
+    /// `peek_tail` works like `pop_tail`, but it returns the immutable reference to the last node
+    /// data rather than consume it.
+    pub fn peek_tail(&mut self) -> Option<&T> {
+        if self.tail.is_none() {
+            return None;
+        }
+
+        let ptr_to_tail_node: *mut Node<T> = self.tail.as_ref().unwrap().as_ptr();
+        Some(unsafe { &(*ptr_to_tail_node).data })
+    }
+
     ///
-    pub fn contain(&self, data_to_check: T) -> bool {
+    pub fn contains(&self, data_to_check: T) -> bool {
         if self.head.is_none() {
             // println!("container -> No head",);
             return false;

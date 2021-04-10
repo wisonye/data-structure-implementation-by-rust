@@ -15,7 +15,7 @@ fn should_create_empty_string_list() {
     assert_eq!(string_list.size(), 0);
     assert_eq!(string_list.get_head(), None);
     assert_eq!(string_list.get_tail(), None);
-    assert_eq!(string_list.contain("Hello".to_string()), false);
+    assert_eq!(string_list.contains("Hello".to_string()), false);
     assert_eq!(string_list.pop_head(), None);
     assert_eq!(string_list.pop_tail(), None);
     assert_eq!(string_list.get_head(), None);
@@ -31,10 +31,10 @@ fn should_create_valid_string_list_with_the_correct_size() {
     assert_eq!(string_list.size(), 3);
     assert_eq!(string_list.get_head(), Some(&"Rust".to_string()));
     assert_eq!(string_list.get_tail(), Some(&"Awesome!".to_string()));
-    assert_eq!(string_list.contain("Hello".to_string()), false);
-    assert_eq!(string_list.contain("Rust".to_string()), true);
-    assert_eq!(string_list.contain("is".to_string()), true);
-    assert_eq!(string_list.contain("Awesome!".to_string()), true);
+    assert_eq!(string_list.contains("Hello".to_string()), false);
+    assert_eq!(string_list.contains("Rust".to_string()), true);
+    assert_eq!(string_list.contains("is".to_string()), true);
+    assert_eq!(string_list.contains("Awesome!".to_string()), true);
     string_list.print_list();
     assert_eq!(
         string_list.get_list_content(),
@@ -51,7 +51,7 @@ fn insert_at_head_and_append_should_work_correctly() {
     // println!("get_tail(): {:?}", string_list.get_tail());
     assert_eq!(string_list.get_head(), Some(&"that: ".to_string()));
     assert_eq!(string_list.get_tail(), Some(&"Awesome!".to_string()));
-    assert_eq!(string_list.contain("that: ".to_string()), true);
+    assert_eq!(string_list.contains("that: ".to_string()), true);
     string_list.print_list();
     assert_eq!(
         string_list.get_list_content(),
@@ -63,7 +63,7 @@ fn insert_at_head_and_append_should_work_correctly() {
     // println!("get_tail(): {:?}", string_list.get_tail());
     assert_eq!(string_list.get_head(), Some(&"I can tell you".to_string()));
     assert_eq!(string_list.get_tail(), Some(&"Awesome!".to_string()));
-    assert_eq!(string_list.contain("I can tell you".to_string()), true);
+    assert_eq!(string_list.contains("I can tell you".to_string()), true);
     string_list.print_list();
     assert_eq!(
         string_list.get_list_content(),
@@ -78,9 +78,9 @@ fn pop_head_should_work_correctly() {
     assert_eq!(string_list.pop_head(), Some("Rust".to_string()));
     assert_eq!(string_list.get_head(), Some(&"is".to_string()));
     assert_eq!(string_list.get_tail(), Some(&"Awesome!".to_string()));
-    assert_eq!(string_list.contain("Rust".to_string()), false);
-    assert_eq!(string_list.contain("is".to_string()), true);
-    assert_eq!(string_list.contain("Awesome!".to_string()), true);
+    assert_eq!(string_list.contains("Rust".to_string()), false);
+    assert_eq!(string_list.contains("is".to_string()), true);
+    assert_eq!(string_list.contains("Awesome!".to_string()), true);
     string_list.print_list();
     assert_eq!(
         string_list.get_list_content(),
@@ -90,18 +90,18 @@ fn pop_head_should_work_correctly() {
     assert_eq!(string_list.pop_head(), Some("is".to_string()));
     assert_eq!(string_list.get_head(), Some(&"Awesome!".to_string()));
     assert_eq!(string_list.get_tail(), Some(&"Awesome!".to_string()));
-    assert_eq!(string_list.contain("Rust".to_string()), false);
-    assert_eq!(string_list.contain("is".to_string()), false);
-    assert_eq!(string_list.contain("Awesome!".to_string()), true);
+    assert_eq!(string_list.contains("Rust".to_string()), false);
+    assert_eq!(string_list.contains("is".to_string()), false);
+    assert_eq!(string_list.contains("Awesome!".to_string()), true);
     string_list.print_list();
     assert_eq!(string_list.get_list_content(), "(1 elements): \"Awesome!\"");
 
     assert_eq!(string_list.pop_head(), Some("Awesome!".to_string()));
     assert_eq!(string_list.get_head(), None);
     assert_eq!(string_list.get_tail(), None);
-    assert_eq!(string_list.contain("Rust".to_string()), false);
-    assert_eq!(string_list.contain("is".to_string()), false);
-    assert_eq!(string_list.contain("Awesome!".to_string()), false);
+    assert_eq!(string_list.contains("Rust".to_string()), false);
+    assert_eq!(string_list.contains("is".to_string()), false);
+    assert_eq!(string_list.contains("Awesome!".to_string()), false);
     string_list.print_list();
     assert_eq!(string_list.get_list_content(), "empty list");
 }
@@ -113,9 +113,9 @@ fn pop_tail_should_work_correctly() {
     assert_eq!(string_list.pop_tail(), Some("Awesome!".to_string()));
     assert_eq!(string_list.get_head(), Some(&"Rust".to_string()));
     assert_eq!(string_list.get_tail(), Some(&"is".to_string()));
-    assert_eq!(string_list.contain("Rust".to_string()), true);
-    assert_eq!(string_list.contain("is".to_string()), true);
-    assert_eq!(string_list.contain("Awesome!".to_string()), false);
+    assert_eq!(string_list.contains("Rust".to_string()), true);
+    assert_eq!(string_list.contains("is".to_string()), true);
+    assert_eq!(string_list.contains("Awesome!".to_string()), false);
     string_list.print_list();
     assert_eq!(
         string_list.get_list_content(),
@@ -125,18 +125,18 @@ fn pop_tail_should_work_correctly() {
     assert_eq!(string_list.pop_tail(), Some("is".to_string()));
     assert_eq!(string_list.get_head(), Some(&"Rust".to_string()));
     assert_eq!(string_list.get_tail(), Some(&"Rust".to_string()));
-    assert_eq!(string_list.contain("Rust".to_string()), true);
-    assert_eq!(string_list.contain("is".to_string()), false);
-    assert_eq!(string_list.contain("Awesome!".to_string()), false);
+    assert_eq!(string_list.contains("Rust".to_string()), true);
+    assert_eq!(string_list.contains("is".to_string()), false);
+    assert_eq!(string_list.contains("Awesome!".to_string()), false);
     string_list.print_list();
     assert_eq!(string_list.get_list_content(), "(1 elements): \"Rust\"");
 
     assert_eq!(string_list.pop_tail(), Some("Rust".to_string()));
     assert_eq!(string_list.get_head(), None);
     assert_eq!(string_list.get_tail(), None);
-    assert_eq!(string_list.contain("Rust".to_string()), false);
-    assert_eq!(string_list.contain("is".to_string()), false);
-    assert_eq!(string_list.contain("Awesome!".to_string()), false);
+    assert_eq!(string_list.contains("Rust".to_string()), false);
+    assert_eq!(string_list.contains("is".to_string()), false);
+    assert_eq!(string_list.contains("Awesome!".to_string()), false);
     string_list.print_list();
     assert_eq!(string_list.get_list_content(), "empty list");
 }

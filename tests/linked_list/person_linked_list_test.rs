@@ -21,7 +21,7 @@ fn should_create_empty_person_list() {
     assert_eq!(person_list.size(), 0);
     assert_eq!(person_list.get_head(), None);
     assert_eq!(person_list.get_tail(), None);
-    assert_eq!(person_list.contain(8), false);
+    assert_eq!(person_list.contains(8), false);
     assert_eq!(person_list.pop_head(), None);
     assert_eq!(person_list.pop_tail(), None);
     assert_eq!(person_list.get_head(), None);
@@ -37,10 +37,10 @@ fn should_create_valid_person_list_with_the_correct_size() {
     assert_eq!(person_list.size(), 3);
     assert_eq!(person_list.get_head(), Some(&Person { name: "David Chen".to_string(), age: Some(25) }));
     assert_eq!(person_list.get_tail(), Some(&Person { name: "Amy He".to_string(), age: Some(40) }));
-    assert_eq!(person_list.contain(Person { name: "David Chen".to_string(), age: Some(25) }), true);
-    assert_eq!(person_list.contain(Person { name: "Amy He".to_string(), age: Some(40) }), true);
-    assert_eq!(person_list.contain(Person { name: "David Ye".to_string(), age: None }), false);
-    assert_eq!(person_list.contain(Person { name: "David Liu".to_string(), age: Some(88) }), false);
+    assert_eq!(person_list.contains(Person { name: "David Chen".to_string(), age: Some(25) }), true);
+    assert_eq!(person_list.contains(Person { name: "Amy He".to_string(), age: Some(40) }), true);
+    assert_eq!(person_list.contains(Person { name: "David Ye".to_string(), age: None }), false);
+    assert_eq!(person_list.contains(Person { name: "David Liu".to_string(), age: Some(88) }), false);
     person_list.print_list();
     assert_eq!(
         person_list.get_list_content(),
@@ -57,7 +57,7 @@ fn insert_at_head_and_append_should_work_correctly() {
     // println!("get_tail(): {:?}", person_list.get_tail());
     assert_eq!(person_list.get_head(), Some(&Person { name: "Mary".to_string(), age: None }));
     assert_eq!(person_list.get_tail(), Some(&Person { name: "Amy He".to_string(), age: Some(40) }));
-    assert_eq!(person_list.contain(Person { name: "Mary".to_string(), age: None }), true);
+    assert_eq!(person_list.contains(Person { name: "Mary".to_string(), age: None }), true);
     person_list.print_list();
     assert_eq!(
         person_list.get_list_content(),
@@ -69,7 +69,7 @@ fn insert_at_head_and_append_should_work_correctly() {
     // println!("get_tail(): {:?}", person_list.get_tail());
     assert_eq!(person_list.get_head(), Some(&Person { name: "Willam".to_string(), age: Some(10) }));
     assert_eq!(person_list.get_tail(), Some(&Person { name: "Amy He".to_string(), age: Some(40) }));
-    assert_eq!(person_list.contain(Person { name: "Willam".to_string(), age: Some(10) }), true);
+    assert_eq!(person_list.contains(Person { name: "Willam".to_string(), age: Some(10) }), true);
     person_list.print_list();
     assert_eq!(
         person_list.get_list_content(),
@@ -84,8 +84,8 @@ fn pop_head_should_work_correctly() {
     assert_eq!(person_list.pop_head(), Some(Person { name: "David Chen".to_string(), age: Some(25) }));
     assert_eq!(person_list.get_head(), Some(&Person { name: "Andy Liu".to_string(), age: Some(30) }));
     assert_eq!(person_list.get_tail(), Some(&Person { name: "Amy He".to_string(), age: Some(40) }));
-    assert_eq!(person_list.contain(Person { name: "David Chen".to_string(), age: Some(25) }), false);
-    assert_eq!(person_list.contain(Person { name: "Andy Liu".to_string(), age: Some(30) }), true);
+    assert_eq!(person_list.contains(Person { name: "David Chen".to_string(), age: Some(25) }), false);
+    assert_eq!(person_list.contains(Person { name: "Andy Liu".to_string(), age: Some(30) }), true);
     person_list.print_list();
     assert_eq!(person_list.get_list_content(), 
         "(2 elements): Person { name: \"Andy Liu\", age: Some(30) } --> Person { name: \"Amy He\", age: Some(40) }"
@@ -94,7 +94,7 @@ fn pop_head_should_work_correctly() {
     assert_eq!(person_list.pop_head(), Some(Person { name: "Andy Liu".to_string(), age: Some(30) }));
     assert_eq!(person_list.get_head(), Some(&Person { name: "Amy He".to_string(), age: Some(40) }));
     assert_eq!(person_list.get_tail(), Some(&Person { name: "Amy He".to_string(), age: Some(40) }));
-    assert_eq!(person_list.contain(Person { name: "Andy Liu".to_string(), age: Some(30) }), false);
+    assert_eq!(person_list.contains(Person { name: "Andy Liu".to_string(), age: Some(30) }), false);
     person_list.print_list();
     assert_eq!(person_list.get_list_content(), 
         "(1 elements): Person { name: \"Amy He\", age: Some(40) }"
