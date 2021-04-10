@@ -1,4 +1,4 @@
-use crate::stack::Stack;
+use crate::stack::stack::Stack;
 
 ///
 #[derive(Debug, PartialEq)]

@@ -1,3 +1,4 @@
+#![allow(warnings)]
 use std::collections::LinkedList;
 use std::fmt;
 

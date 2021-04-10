@@ -184,6 +184,12 @@ Complexity ordered in form smallest to largest:
 
         ```bash
         # No debug info output
+        cargo watch --clear --exec 'test stack_test'
+
+        # With debug info output
+        cargo watch --clear --exec 'test stack_test -- --nocapture'
+
+        # No debug info output
         cargo watch -c --exec 'test token -- --nocapture'
 
         # Print all debug info
