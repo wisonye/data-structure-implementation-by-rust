@@ -1,3 +1,5 @@
+use std::fmt::Debug;
+
 ///
 ///
 ///
@@ -14,7 +16,7 @@ pub struct GraphNodeEdge {
 ///
 ///
 #[derive(Debug)]
-pub struct GraphNode<T> {
+pub struct GraphNode<T: Debug> {
     // Generic data that binds with the current node/vertex
     pub data: T,
 
@@ -25,7 +27,7 @@ pub struct GraphNode<T> {
 ///
 ///
 ///
-pub trait Graph<T> {
+pub trait Graph<T: Debug> {
     fn with_first_node(first_node: GraphNode<T>) -> Self;
     fn with_all_nodes(nodes: Vec<GraphNode<T>>) -> Self;
     // fn add_node(&mut self, node: GraphNode<T>);
@@ -37,19 +39,68 @@ pub trait Graph<T> {
 ///
 ///
 ///
-#[derive(Debug)]
-pub struct UndirectedGraph<T> {
+pub struct UndirectedGraph<T: Debug> {
     nodes: Vec<GraphNode<T>>,
 }
 
-impl<T> Graph<T> for UndirectedGraph<T> {
+impl<T: Debug> UndirectedGraph<T> {
+    ///
+    ///
+    ///
+    fn get_node_edge_in_ajacency_list_format(&self, node_index: usize) -> String {
+        if node_index >= self.nodes.len() {
+            return "[  ]".to_string();
+        }
 
+        let node = &self.nodes[node_index];
+        let mut temp_vec = Vec::<String>::new();
+        for neighbor in node.neighbors.iter() {
+            temp_vec.push(format!(
+                "-> {:?}({})",
+                self.nodes[neighbor.node_index].data, neighbor.weight
+            ));
+            // temp_vec.push(format!("-> {}({})", neighbor.node_index, neighbor.weight));
+        }
+        temp_vec.join(", ")
+    }
+}
+
+impl<T: Debug> std::fmt::Debug for UndirectedGraph<T> {
+    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+        let mut debug_info = f.debug_struct("[ UndirectedGraph ]");
+        debug_info.field("nodes_len", &self.nodes_len());
+        debug_info.field("edges_len", &self.edges_len());
+        debug_info.field("nodes and edges", &self.edges_len());
+
+        // debug_info.field("{ Adjacency list }", &"");
+
+        //
+        // Output like a adjacency list
+        //
+        for (index, node) in self.nodes.iter().enumerate() {
+            let label = if index == 0 {
+                format!(
+                    "\n>>> Nodes in adjacency list format>>>\n\n[{}] {:?}",
+                    index, &node.data
+                )
+            } else {
+                format!("[{}] {:?}", index, &node.data)
+            };
+
+            debug_info.field(&label, &self.get_node_edge_in_ajacency_list_format(index));
+        }
+
+        debug_info.finish()
+    }
+}
+
+impl<T: Debug> Graph<T> for UndirectedGraph<T> {
     ///
     ///
     ///
     fn with_first_node(first_node: GraphNode<T>) -> Self {
         Self {
-            nodes: vec!(first_node)
+            nodes: vec![first_node],
         }
     }
 
@@ -57,9 +108,7 @@ impl<T> Graph<T> for UndirectedGraph<T> {
     ///
     ///
     fn with_all_nodes(nodes: Vec<GraphNode<T>>) -> Self {
-        Self {
-            nodes
-        }
+        Self { nodes }
     }
 
     // ///
