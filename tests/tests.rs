@@ -7,3 +7,7 @@ mod linked_list {
 mod stack {
     mod browser_history_stack_test;
 }
+
+mod graph {
+    mod undirected_graph_test;
+}

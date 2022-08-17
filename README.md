@@ -24,6 +24,9 @@ cargo test
 # Run all internal unit test and all integration unit test in `tests` folder
 # If you want to see the `println` output
 cargo test -- --nocapture
+
+# Only run the graph test
+cargo watch -c --exec "test -- --nocapture graph"
 ```
 
 </br>
