@@ -2,12 +2,12 @@
 ///
 ///
 #[derive(Debug)]
-pub struct GraphNodeEgde {
+pub struct GraphNodeEdge {
     // The node index in the graph node array
-    node_index: usize,
+    pub node_index: usize,
 
     // The weight of the edge
-    weight: usize,
+    pub weight: usize,
 }
 
 ///
@@ -19,15 +19,16 @@ pub struct GraphNode<T> {
     pub data: T,
 
     // All nodes that connects with `edges`
-    pub neighbors: Vec<GraphNodeEgde>,
+    pub neighbors: Vec<GraphNodeEdge>,
 }
 
 ///
 ///
 ///
 pub trait Graph<T> {
-    fn new(first_node: GraphNode<T>) -> Self;
-    fn add_node(&mut self, node: GraphNode<T>);
+    fn with_first_node(first_node: GraphNode<T>) -> Self;
+    fn with_all_nodes(nodes: Vec<GraphNode<T>>) -> Self;
+    // fn add_node(&mut self, node: GraphNode<T>);
     fn nodes_len(&self) -> usize;
     fn edges_len(&self) -> usize;
     // fn get_neighbors_by_node(&self, node_index: usize) -> [GraphNode<T>];
@@ -46,7 +47,7 @@ impl<T> Graph<T> for UndirectedGraph<T> {
     ///
     ///
     ///
-    fn new(first_node: GraphNode<T>) -> Self {
+    fn with_first_node(first_node: GraphNode<T>) -> Self {
         Self {
             nodes: vec!(first_node)
         }
@@ -55,9 +56,17 @@ impl<T> Graph<T> for UndirectedGraph<T> {
     ///
     ///
     ///
-    fn add_node(&mut self, node: GraphNode<T>) {
-       self. nodes.push(node);
+    fn with_all_nodes(nodes: Vec<GraphNode<T>>) -> Self {
+        Self {
+            nodes
+        }
     }
+
+    // ///
+    // ///
+    // fn add_node(&mut self, node: GraphNode<T>) {
+    //    self. nodes.push(node);
+    // }
 
     ///
     ///
