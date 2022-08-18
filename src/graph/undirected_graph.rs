@@ -36,6 +36,84 @@ pub struct GraphNode<T: Debug + DeserializeOwned> {
 pub trait Graph<T: Debug + DeserializeOwned> {
     fn with_first_node(first_node: GraphNode<T>) -> Self;
     fn with_all_nodes(nodes: Vec<GraphNode<T>>) -> Self;
+
+    /// Load an entire graph instance from file
+    ///
+    /// # About the `<T>`
+    ///
+    /// The generic `<T>` has to implement the following traits
+    ///
+    /// - `Debug`
+    ///
+    ///     Because `UndirectedGraph` `GraphNode` has its own `Debug` implementation
+    ///     and it will print out the debug string for each `GraphNode`.
+    ///
+    ///     That's why you should implement the `Debug` trait for the `<T>` to
+    ///     print out a short version string to avoid the very long `GraphNode`
+    ///     debug info.
+    ///
+    /// - `Deserialize`
+    ///
+    ///     To be able to load any data struct from a file, that node data part has to be a JSON format, that's why `<T>` has to implement the `Deserialize` trait.
+    ///
+    /// ```no_run
+    /// #[derive(Deserialize)]
+    /// #[serde(rename_all = "camelCase")]
+    /// struct Planet {
+    ///     label: Option<String>,
+    ///     draw_color: Option<String>,
+    ///     draw_sprite: Option<String>,
+    ///     is_reachable: Option<bool>,
+    ///     relative_position: Option<(isize, isize)>,
+    /// }
+    ///
+    /// impl std::fmt::Debug for Planet {
+    ///     fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+    ///         let label_str = if self.label.is_some() {
+    ///             self.label.as_ref().unwrap()
+    ///         } else {
+    ///             "No lablel"
+    ///         };
+    ///         write!(f, "{}", label_str)
+    ///     }
+    /// }
+    /// ```
+    ///
+    ///
+    /// - File format
+    ///
+    ///     Each line should have the following format:
+    ///
+    ///     `{...JSON data here} | edges_separated_by_comma`
+    ///
+    ///     </br>
+    ///
+    ///     Each edge should have the following format:
+    ///
+    ///     `-> Connected_node_index(edge_weight)`
+    ///
+    ///     Here is the example:
+    ///
+    ///     ```no_run
+    ///     {"name": "Alien Home"} |  -> 1(5),
+    ///     {"name": "Earth"} | -> 0(5), -> 2(8),
+    ///     {"name": "Mars"} | -> 1(8),
+    ///     ```
+    ///
+    /// # Examples
+    ///
+    /// ```no_run
+    /// match UndirectedGraph::<Planet>::load_from_file("alien_map_1.txt") {
+    ///     Ok(graph) => {
+    ///         println!("loaded graph: {graph:#?}");
+    ///     }
+    ///     Err(error) => {
+    ///         println!(">>> 'load_graph_from_file_should_work' failed by: {error:#?}");
+    ///     }
+    /// }
+    ///
+    /// ```
+    ///
     fn load_from_file(graph_filename: &str) -> Result<Self, String>
     where
         Self: Sized;
@@ -120,9 +198,6 @@ impl<T: Debug + DeserializeOwned> Graph<T> for UndirectedGraph<T> {
         Self { nodes }
     }
 
-    ///
-    ///
-    ///
     fn load_from_file(graph_filename: &str) -> Result<Self, String>
     where
         Self: Sized,
