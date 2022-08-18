@@ -1,4 +1,10 @@
+use serde::de::DeserializeOwned;
+use serde::{Deserialize, Serialize};
+use serde_json::from_str;
 use std::fmt::Debug;
+use std::fs::File;
+use std::io::{self, BufRead};
+use std::path::Path;
 
 ///
 ///
@@ -16,9 +22,9 @@ pub struct GraphNodeEdge {
 ///
 ///
 #[derive(Debug)]
-pub struct GraphNode<T: Debug> {
+pub struct GraphNode<T: Debug + DeserializeOwned> {
     // Generic data that binds with the current node/vertex
-    pub data: T,
+    pub data: Option<T>,
 
     // All nodes that connects with `edges`
     pub neighbors: Vec<GraphNodeEdge>,
@@ -27,9 +33,12 @@ pub struct GraphNode<T: Debug> {
 ///
 ///
 ///
-pub trait Graph<T: Debug> {
+pub trait Graph<T: Debug + DeserializeOwned> {
     fn with_first_node(first_node: GraphNode<T>) -> Self;
     fn with_all_nodes(nodes: Vec<GraphNode<T>>) -> Self;
+    fn load_from_file(graph_filename: &str) -> Result<Self, String>
+    where
+        Self: Sized;
     // fn add_node(&mut self, node: GraphNode<T>);
     fn nodes_len(&self) -> usize;
     fn edges_len(&self) -> usize;
@@ -39,11 +48,11 @@ pub trait Graph<T: Debug> {
 ///
 ///
 ///
-pub struct UndirectedGraph<T: Debug> {
+pub struct UndirectedGraph<T: Debug + DeserializeOwned> {
     nodes: Vec<GraphNode<T>>,
 }
 
-impl<T: Debug> UndirectedGraph<T> {
+impl<T: Debug + DeserializeOwned> UndirectedGraph<T> {
     ///
     ///
     ///
@@ -65,7 +74,7 @@ impl<T: Debug> UndirectedGraph<T> {
     }
 }
 
-impl<T: Debug> std::fmt::Debug for UndirectedGraph<T> {
+impl<T: Debug + DeserializeOwned> std::fmt::Debug for UndirectedGraph<T> {
     fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
         let mut debug_info = f.debug_struct("[ UndirectedGraph ]");
         debug_info.field("nodes_len", &self.nodes_len());
@@ -94,7 +103,7 @@ impl<T: Debug> std::fmt::Debug for UndirectedGraph<T> {
     }
 }
 
-impl<T: Debug> Graph<T> for UndirectedGraph<T> {
+impl<T: Debug + DeserializeOwned> Graph<T> for UndirectedGraph<T> {
     ///
     ///
     ///
@@ -109,6 +118,122 @@ impl<T: Debug> Graph<T> for UndirectedGraph<T> {
     ///
     fn with_all_nodes(nodes: Vec<GraphNode<T>>) -> Self {
         Self { nodes }
+    }
+
+    ///
+    ///
+    ///
+    fn load_from_file(graph_filename: &str) -> Result<Self, String>
+    where
+        Self: Sized,
+    {
+        // The output is wrapped in a Result to allow matching on errors
+        // Returns an Iterator to the Reader of the lines of the file.
+        fn read_lines<P>(filename: P) -> Result<io::Lines<io::BufReader<File>>, std::io::Error>
+        where
+            P: AsRef<Path>,
+        {
+            let file = File::open(filename)?;
+            Ok(io::BufReader::new(file).lines())
+        }
+
+        #[derive(Debug, Serialize, Deserialize)]
+        #[serde(rename_all = "camelCase")]
+        struct Planet {
+            name: String,
+            draw_color: String,
+            draw_sprite: String,
+            is_reachable: bool,
+        }
+
+        let lines = read_lines(graph_filename);
+        if lines.is_err() {
+            return Err(lines.unwrap_err().to_string());
+        }
+
+        let mut loaded_graph = Self { nodes: vec![] };
+
+        for line in lines.unwrap() {
+            if let Ok(node_str) = line {
+                // println!("lines: {node_str}");
+
+                let mut graph_node = GraphNode::<T> {
+                    data: None,
+                    neighbors: vec![],
+                };
+
+                //
+                // Each line has the following format:
+                //
+                // `{...JSON data here} | edges_separated_by_comma`
+                //
+                // Each edge has the following format:
+                //
+                // `-> Connected_node_index(edge_weight)`
+                //
+                // Here is the example:
+                //
+                // {"name": "Alien Home"} |  -> 1(5),
+                // {"name": "Earth"} | -> 0(5), -> 2(8),
+                // {"name": "Mars"} | -> 1(8),
+                //
+                for (index, temp_str) in node_str.split("|").into_iter().enumerate() {
+                    // GraphNode data json
+                    if index == 0 {
+                        graph_node.data = Some(from_str::<T>(temp_str).unwrap());
+                    }
+                    // GraphNodeEdge
+                    else if index == 1 {
+                        let edges = temp_str.split(",");
+                        for edge_str in edges.into_iter() {
+                            if edge_str.trim() == "" {
+                                continue;
+                            }
+                            // println!("edge_str: {edge_str}");
+
+                            let invalid_edge_format = format!("Edge string '{edge_str}' should the following format: '-> Connected_node_index(edge_weight)'");
+                            let after_arrow_pos = edge_str.find("-> ");
+                            let left_parentheses_pos = edge_str.find('(');
+                            let right_parentheses_pos = edge_str.find(')');
+
+                            if after_arrow_pos.is_none()
+                                || left_parentheses_pos.is_none()
+                                || right_parentheses_pos.is_none()
+                            {
+                                return Err(invalid_edge_format);
+                            }
+
+                            let connected_node_index = &edge_str
+                                [after_arrow_pos.unwrap() + 3..left_parentheses_pos.unwrap()]
+                                .parse::<usize>();
+                            // println!("connected_node_index {connected_node_index:?}");
+
+                            if connected_node_index.is_err() {
+                                return Err(invalid_edge_format);
+                            }
+
+                            let edge_weight = &edge_str
+                                [left_parentheses_pos.unwrap() + 1..right_parentheses_pos.unwrap()]
+                                .parse::<usize>();
+                            // println!("edge_weight: {edge_weight:?}");
+
+                            if edge_weight.is_err() {
+                                return Err(invalid_edge_format);
+                            }
+
+                            graph_node.neighbors.push(GraphNodeEdge {
+                                node_index: *connected_node_index.as_ref().unwrap(),
+                                weight: *edge_weight.as_ref().unwrap(),
+                            });
+                        }
+                    }
+                }
+
+                loaded_graph.nodes.push(graph_node);
+            }
+        }
+
+        Ok(loaded_graph)
     }
 
     // ///
